@@ -1,5 +1,5 @@
 {
-  "name": "invoicin-main-ui",
+  "name": "@invoicin/root-config",
   "scripts": {
     "start": "webpack serve --port 9000 --env isLocal",
     "lint": "eslint src --ext js",

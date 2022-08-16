@@ -11,15 +11,18 @@ const applications = constructApplications({
   loadApp({ name }) {
     return Promise.resolve()
       .then(() => {
-        showLoader();
-        if(Config.isLocal) {
+        showLoader(name);
+        if (Config.isLocal) {
           return import(
             /* webpackIgnore: true */
             Config.localImportMaps[name]
           );
         }
-        return System.import(name);
+        setTimeout(function () {
+          return System.import(name);
+        }, 10000);
       })
+      .then(sleeper(1000))
       .then((app) => {
         removeLoader();
         return app;
@@ -34,12 +37,31 @@ start({
   urlRerouteOnly: true,
 });
 
-function showLoader() {
-  document.body.insertAdjacentHTML(
+function showLoader(name) {
+  let appId = "none";
+  let customClass = "";
+  let tag = document.body;
+  if (name === "@invoicin/dashboard-ui") {
+    appId = "dashboard-ui";
+    customClass = "dashboard-ui-style";
+    tag = document.getElementById(appId);
+  }
+  tag.insertAdjacentHTML(
     "beforeend",
-    '<div id="content-loader">Loading...</div>'
+    '<div id="content-loader" class="' +
+      customClass +
+      '">' +
+      '<div class="loadingio-spinner-bars-9ky0l3udq1c"><div class="ldio-ru85idovvw">' +
+      "<div></div><div></div><div></div><div></div>" +
+      "</div></div>" +
+      "</div>"
   );
 }
 function removeLoader() {
   document.getElementById("content-loader").remove();
+}
+function sleeper(ms) {
+  return function (x) {
+    return new Promise((resolve) => setTimeout(() => resolve(x), ms));
+  };
 }
