@@ -11,7 +11,9 @@ const applications = constructApplications({
   loadApp({ name }) {
     return Promise.resolve()
       .then(() => {
-        showLoader(name);
+        if (window.location.pathname != '/login') {
+          showLoader(name);
+        }
         if (Config.isLocal) {
           return import(
             /* webpackIgnore: true */
@@ -24,7 +26,9 @@ const applications = constructApplications({
       })
       .then(sleeper(1000))
       .then((app) => {
-        removeLoader();
+        if (window.location.pathname != '/login') {
+          removeLoader();
+        }
         return app;
       });
   },
