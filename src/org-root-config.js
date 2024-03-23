@@ -52,10 +52,8 @@ function showLoader(name) {
   }
   tag.insertAdjacentHTML(
     "beforeend",
-    '<div id="content-loader" class="' +
-      customClass +
-      '">' +
-      '<div class="loadingio-spinner-bars-9ky0l3udq1c"><div class="ldio-ru85idovvw">' +
+    '<div id="content-loader" class="' + customClass + '">' +
+      '<div class="loadingio-spinner-bars-9ky0l3udq1c"><div class="ldio-ru85idovvwTEST">' +
       "<div></div><div></div><div></div><div></div>" +
       "</div></div>" +
       "</div>"
