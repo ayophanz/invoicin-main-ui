@@ -11,29 +11,22 @@ const applications = constructApplications({
   loadApp({ name }) {
     return Promise.resolve()
       .then(() => {
-        if (window.location.pathname != '/login') {
-          showLoader(name);
-        }
+        showLoader();
         if (Config.isLocal) {
           return import(
             /* webpackIgnore: true */
             Config.localImportMaps[name]
           );
         }
-        setTimeout(function () {
-          return System.import(name);
-        }, 10000);
+        return System.import(name);
       })
-      .then(sleeper(1000))
       .then((app) => {
-        if (window.location.pathname != '/login') {
-          removeLoader();
-        }
+        removeLoader();
         return app;
       });
   },
 });
-const layoutEngine = constructLayoutEngine({ routes, applications });
+constructLayoutEngine({ routes, applications });
 
 applications.forEach(registerApplication);
 
@@ -41,29 +34,12 @@ start({
   urlRerouteOnly: true,
 });
 
-function showLoader(name) {
-  let appId = "none";
-  let customClass = "";
-  let tag = document.body;
-  if (name === "@invoicin/dashboard-ui") {
-    appId = "dashboard-ui";
-    customClass = "dashboard-ui-style";
-    tag = document.getElementById(appId);
-  }
-  tag.insertAdjacentHTML(
+function showLoader() {
+  document.body.insertAdjacentHTML(
     "beforeend",
-    '<div id="content-loader" class="' + customClass + '">' +
-      '<div class="loadingio-spinner-bars-9ky0l3udq1c"><div class="ldio-ru85idovvwTEST">' +
-      "<div></div><div></div><div></div><div></div>" +
-      "</div></div>" +
-      "</div>"
+    '<div id="content-loader">Redirecting...</div>'
   );
 }
 function removeLoader() {
   document.getElementById("content-loader").remove();
-}
-function sleeper(ms) {
-  return function (x) {
-    return new Promise((resolve) => setTimeout(() => resolve(x), ms));
-  };
 }
